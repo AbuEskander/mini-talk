@@ -1,6 +1,8 @@
 {
         "files.associations": {
                 "server.h": "c",
-                "libft.h": "c"
+                "libft.h": "c",
+                "stdlib.h": "c",
+                "signal.h": "c"
         }
 }

@@ -4,7 +4,6 @@
 static void	send_signals(char sent,	int pid)
 {
 	int	i;
-	ft_putchar_fd(sent,1);
 	i = 7;
 	while(i >= 0)
 	{
@@ -13,7 +12,7 @@ static void	send_signals(char sent,	int pid)
 		else
 			kill(pid,SIGUSR1);
 		i--;
-		usleep(1000);
+		usleep(400);
 	}
 }
 int	main(int argc, char **argv)
