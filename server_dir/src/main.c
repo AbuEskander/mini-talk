@@ -6,7 +6,7 @@
 /*   By: bismail <bismail@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 11:30:08 by bismail           #+#    #+#             */
-/*   Updated: 2024/11/06 13:29:37 by bismail          ###   ########.fr       */
+/*   Updated: 2024/11/06 10:31:34 by bismail          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,21 @@ void	addzero(int sig)
 int	main(void)
 {
 	struct sigaction zero;
-	struct sigaction one;
-	int pid;
+	struct sigaction one;	
+
+	// zero.sa_flags = SA_NODEFER;
+	// one.sa_flags = SA_NODEFER;
+	zero.sa_handler = &addzero;
+	one.sa_handler = &addone;
+	int pid = getpid();
 	int offset;
 	char tbd;
 	
-	zero.flags = SA_NODEFER
 	offset = -1;
 	tbd = 0;
 	ft_printf("%d \n", pid);
-	signal(SIGUSR1, &addone);
-	signal(SIGUSR2, &addzero);
+	sigaction(SIGUSR1, &one,NULL);
+	sigaction(SIGUSR2, &zero,NULL);
 	while (1)
 	{
 		pause();
