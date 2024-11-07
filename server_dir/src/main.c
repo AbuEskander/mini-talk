@@ -12,53 +12,38 @@
 
 #include "server.h"
 
-int			g_handledbits = 0;
-
-static void	tobedisplayed(char *tbd, int *offset)
+void	addone(int sig,siginfo_t *info, void *context)
 {
-	*tbd <<= 1;
-	*tbd |= g_handledbits;
-	++*offset;
-	if(*offset == 7)
+	(void)context;
+	static int	offset = -1;
+	static char tbd = 0;
+	tbd <<= 1;
+	if(SIGUSR1 == sig)
+		tbd |= 1;
+	++offset;
+	if(offset == 7)
 	{
-		ft_putchar_fd(*tbd,1);
-		*offset = -1;
-		*tbd = 0;
+		ft_putchar_fd(tbd,1);
+		offset = -1;
+		tbd = 0;
+		kill(info->si_pid,SIGUSR1);
 	}
 }
-void	addone(int sig)
-{
-	(void)sig;
-	g_handledbits = 1;
-}
 
-void	addzero(int sig)
-{
-	(void)sig;
-	g_handledbits = 0;
-}
 
 int	main(void)
 {
-	struct sigaction zero;
-	struct sigaction one;	
+	struct sigaction sa;
+	int pid;
 
-	// zero.sa_flags = SA_NODEFER;
-	// one.sa_flags = SA_NODEFER;
-	zero.sa_handler = &addzero;
-	one.sa_handler = &addone;
-	int pid = getpid();
-	int offset;
-	char tbd;
-	
-	offset = -1;
-	tbd = 0;
+	sa.sa_flags = SA_SIGINFO;
+	sa.sa_sigaction = &addone;
+	pid = getpid();
 	ft_printf("%d \n", pid);
-	sigaction(SIGUSR1, &one,NULL);
-	sigaction(SIGUSR2, &zero,NULL);
+	sigaction(SIGUSR1, &sa,NULL);
+	sigaction(SIGUSR2, &sa,NULL);
 	while (1)
 	{
 		pause();
-		tobedisplayed(&tbd, &offset);
 	}
 }
