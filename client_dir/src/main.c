@@ -1,6 +1,6 @@
 #include "../includes/client.h"
 
-
+int g_received = 0;
 static void	send_signals(char sent,	int pid)
 {
 	int	i;
@@ -13,16 +13,19 @@ static void	send_signals(char sent,	int pid)
 		}	
 		else
 			kill(pid,SIGUSR1);
-		
-		usleep(600);
-		i--;
-			
+		pause();
+			i--;
 	}
 }
 void print_stat(int sig)
 {
 	(void)sig;
 	ft_printf("received a char\n");
+}
+void tweek_received(int sig)
+{
+	(void)sig;
+	g_received = 1;
 }
 int	main(int argc, char **argv)
 {
@@ -32,6 +35,7 @@ int	main(int argc, char **argv)
 		return (0);
 	i = 0;
 	signal(SIGUSR1,&print_stat);
+	signal(SIGUSR2,&tweek_received);
 	while(argv[2][i])
 	{
 		send_signals(argv[2][i], ft_atoi(argv[1]));
