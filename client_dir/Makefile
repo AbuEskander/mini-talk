@@ -1,6 +1,6 @@
 CC = cc 
 CFLAGS = -Wall -Werror -Wextra -I./includes
-SRCS = main.c
+SRCS = client.c
 SRC_DIR = src
 OBJ_DIR = build
 SRCSDIR=$(addprefix src/,$(SRCS))

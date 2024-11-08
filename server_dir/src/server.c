@@ -28,7 +28,6 @@ void	addone(int sig,siginfo_t *info, void *context)
 		tbd = 0;
 		kill(info->si_pid,SIGUSR1);
 	}
-	kill(info->si_pid,SIGUSR2);
 }
 
 
